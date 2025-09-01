@@ -48,3 +48,23 @@ CREATE TABLE program_modules (
     module_id INT REFERENCES modules (id)
     PRIMARY KEY (program_id, course_id)
 );
+
+CREATE TABLE teaching_groups (
+    id SERIAL PRIMARY KEY,
+    slack VARCHAR(200),
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(200),
+    email VARCHAR(200),
+    role user_role,
+    password_hash TEXT,
+    teaching_group_id INT REFERENCES teaching_groups (id),
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
