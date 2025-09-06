@@ -68,3 +68,49 @@ CREATE TABLE users (
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
+
+CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
+
+CREATE TABLE enrollments (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users (id),
+    program_id INT REFERENCES programs (id),
+    status enrollment_status,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
+
+CREATE TABLE payments (
+    id SERIAL PRIMARY KEY,
+    enrollment_id INT REFERENCES enrollments (id),
+    amount INT,
+    status payment_status,
+    payment_date TIMESTAMP,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
+
+CREATE TABLE program_completions (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users (id),
+    program_id INT REFERENCES programs (id),
+    status program_completions_status,
+    begin TIMESTAMP,
+    end TIMESTAMP,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+CREATE TABLE certificates (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users (id),
+    program_id INT REFERENCES programs (id),
+    url VARCHAR(500),
+    issue_date TIMESTAMP,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
