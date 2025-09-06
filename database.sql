@@ -132,3 +132,24 @@ CREATE TABLE exercises (
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
+
+
+CREATE TABLE discussions (
+    id SERIAL PRIMARY KEY,
+    lesson_id INT REFERENCES lessons (id),
+    content TEXT,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
+
+CREATE TABLE blogs (
+    id SERIAL PRIMARY KEY,
+    student_id INT REFERENCES users (id),
+    title VARCHAR(200),
+    content TEXT,
+    status blog_status,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
