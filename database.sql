@@ -114,3 +114,21 @@ CREATE TABLE certificates (
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
+
+CREATE TABLE quizzes (
+    id SERIAL PRIMARY KEY,
+    lesson_id INT REFERENCES lessons (id),
+    title VARCHAR(200),
+    context TEXT,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+CREATE TABLE exercises (
+    id SERIAL PRIMARY KEY,
+    lesson_id INT REFERENCES lessons (id),
+    title VARCHAR(100),
+    url VARCHAR(500),
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
