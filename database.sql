@@ -1,5 +1,5 @@
 CREATE TABLE courses (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title VARCHAR(100),
     description VARCHAR(200),
     created_at TIMESTAMP,
@@ -8,7 +8,7 @@ CREATE TABLE courses (
 );
 
 CREATE TABLE lessons (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title VARCHAR(100),
     content TEXT,
     video_link VARCHAR(500),
@@ -20,7 +20,7 @@ CREATE TABLE lessons (
 );
 
 CREATE TABLE modules (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title VARCHAR(100),
     description VARCHAR(200),
     created_at TIMESTAMP,
@@ -29,7 +29,7 @@ CREATE TABLE modules (
 );
 
 CREATE TABLE programs (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title VARCHAR(100),
     price INT,
     type VARCHAR(100),
@@ -45,21 +45,21 @@ CREATE TABLE modules_courses (
 
 CREATE TABLE program_modules (
     program_id INT REFERENCES  programs (id),
-    module_id INT REFERENCES modules (id)
-    PRIMARY KEY (program_id, course_id)
+    module_id INT REFERENCES modules (id),
+    PRIMARY KEY (program_id, module_id)
 );
 
 CREATE TABLE teaching_groups (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     slack VARCHAR(200),
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
 
-CREATE TYPE user_role AS ENUM ('student', 'teacher', 'admin');
+CREATE TYPE user_role AS ENUM ('Student', 'Teacher', 'Admin');
 
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(200),
     email VARCHAR(200),
     role user_role,
@@ -72,7 +72,7 @@ CREATE TABLE users (
 CREATE TYPE enrollment_status AS ENUM ('active', 'pending', 'cancelled', 'completed');
 
 CREATE TABLE enrollments (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id INT REFERENCES users (id),
     program_id INT REFERENCES programs (id),
     status enrollment_status,
@@ -83,7 +83,7 @@ CREATE TABLE enrollments (
 CREATE TYPE payment_status AS ENUM ('pending', 'paid', 'failed', 'refunded');
 
 CREATE TABLE payments (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     enrollment_id INT REFERENCES enrollments (id),
     amount INT,
     status payment_status,
@@ -95,18 +95,18 @@ CREATE TABLE payments (
 CREATE TYPE program_completions_status AS ENUM ('active', 'completed', 'pending', 'cancelled');
 
 CREATE TABLE program_completions (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id INT REFERENCES users (id),
     program_id INT REFERENCES programs (id),
     status program_completions_status,
-    begin TIMESTAMP,
-    end TIMESTAMP,
+    begin_at TIMESTAMP,
+    end_at TIMESTAMP,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
 
 CREATE TABLE certificates (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     user_id INT REFERENCES users (id),
     program_id INT REFERENCES programs (id),
     url VARCHAR(500),
@@ -116,7 +116,7 @@ CREATE TABLE certificates (
 );
 
 CREATE TABLE quizzes (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     lesson_id INT REFERENCES lessons (id),
     title VARCHAR(200),
     context TEXT,
@@ -125,7 +125,7 @@ CREATE TABLE quizzes (
 );
 
 CREATE TABLE exercises (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     lesson_id INT REFERENCES lessons (id),
     title VARCHAR(100),
     url VARCHAR(500),
@@ -135,7 +135,7 @@ CREATE TABLE exercises (
 
 
 CREATE TABLE discussions (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     lesson_id INT REFERENCES lessons (id),
     content TEXT,
     created_at TIMESTAMP,
@@ -145,7 +145,7 @@ CREATE TABLE discussions (
 CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archived');
 
 CREATE TABLE blogs (
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     student_id INT REFERENCES users (id),
     title VARCHAR(200),
     content TEXT,
