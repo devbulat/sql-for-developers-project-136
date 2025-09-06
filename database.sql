@@ -120,7 +120,7 @@ CREATE TABLE quizzes (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     lesson_id INT REFERENCES lessons (id),
     name VARCHAR(200),
-    content TEXT,
+    content JSONB,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
