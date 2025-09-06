@@ -139,7 +139,7 @@ CREATE TABLE discussions (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     lesson_id INT REFERENCES lessons (id),
     user_id INT REFERENCES users (id),
-    text TEXT,
+    text JSONB,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
