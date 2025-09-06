@@ -1,43 +1,43 @@
 CREATE TABLE courses (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    title VARCHAR(100),
+    name VARCHAR(100),
     description VARCHAR(200),
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
-    is_deleted BOOLEAN
+    deleted_at TIMESTAMP
 );
 
 CREATE TABLE lessons (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    title VARCHAR(100),
+    name VARCHAR(100),
     content TEXT,
-    video_link VARCHAR(500),
+    video_url VARCHAR(500),
     position INT,
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
-    is_deleted BOOLEAN,
+    deleted_at TIMESTAMP,
     course_id INT REFERENCES courses (id)
 );
 
 CREATE TABLE modules (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    title VARCHAR(100),
+    name VARCHAR(100),
     description VARCHAR(200),
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
-    is_deleted BOOLEAN
+    deleted_at TIMESTAMP
 );
 
 CREATE TABLE programs (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    title VARCHAR(100),
+    name VARCHAR(100),
     price INT,
-    type VARCHAR(100),
+    program_type VARCHAR(100),
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
 
-CREATE TABLE modules_courses (
+CREATE TABLE course_modules (
     module_id INT REFERENCES modules (id),
     course_id INT REFERENCES  courses (id),
     PRIMARY KEY (module_id, course_id)
@@ -51,7 +51,7 @@ CREATE TABLE program_modules (
 
 CREATE TABLE teaching_groups (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    slack VARCHAR(200),
+    slug VARCHAR(200),
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -65,6 +65,7 @@ CREATE TABLE users (
     role user_role,
     password_hash TEXT,
     teaching_group_id INT REFERENCES teaching_groups (id),
+    deleted_at TIMESTAMP,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -87,7 +88,7 @@ CREATE TABLE payments (
     enrollment_id INT REFERENCES enrollments (id),
     amount INT,
     status payment_status,
-    payment_date TIMESTAMP,
+    paid_at TIMESTAMP,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -99,8 +100,8 @@ CREATE TABLE program_completions (
     user_id INT REFERENCES users (id),
     program_id INT REFERENCES programs (id),
     status program_completions_status,
-    begin_at TIMESTAMP,
-    end_at TIMESTAMP,
+    started_at TIMESTAMP,
+    completed_at TIMESTAMP,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -110,7 +111,7 @@ CREATE TABLE certificates (
     user_id INT REFERENCES users (id),
     program_id INT REFERENCES programs (id),
     url VARCHAR(500),
-    issue_date TIMESTAMP,
+    issued_at TIMESTAMP,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -118,8 +119,8 @@ CREATE TABLE certificates (
 CREATE TABLE quizzes (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     lesson_id INT REFERENCES lessons (id),
-    title VARCHAR(200),
-    context TEXT,
+    name VARCHAR(200),
+    content TEXT,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -127,7 +128,7 @@ CREATE TABLE quizzes (
 CREATE TABLE exercises (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     lesson_id INT REFERENCES lessons (id),
-    title VARCHAR(100),
+    name VARCHAR(100),
     url VARCHAR(500),
     created_at TIMESTAMP,
     updated_at TIMESTAMP
@@ -137,7 +138,8 @@ CREATE TABLE exercises (
 CREATE TABLE discussions (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     lesson_id INT REFERENCES lessons (id),
-    content TEXT,
+    user_id INT REFERENCES users (id),
+    text TEXT,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -146,8 +148,8 @@ CREATE TYPE blog_status AS ENUM ('created', 'in moderation', 'published', 'archi
 
 CREATE TABLE blogs (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    student_id INT REFERENCES users (id),
-    title VARCHAR(200),
+    user_id INT REFERENCES users (id),
+    name VARCHAR(200),
     content TEXT,
     status blog_status,
     created_at TIMESTAMP,
